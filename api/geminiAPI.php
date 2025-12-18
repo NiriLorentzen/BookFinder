@@ -26,7 +26,7 @@ if (session_status() !== PHP_SESSION_ACTIVE) {
 // Bytter navnet på api-nøkkelen, for bedre oversikt
 $apiKey = $Gemini_API_key;
 
-$url = "https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent";
+$url = "https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash-lite:generateContent";
 
 // Henter JSON fra JS fetch, henter input 
 $input = json_decode(file_get_contents("php://input"), true);
@@ -37,8 +37,7 @@ $initialprompt = sanitizeInputs($initialprompt);
 $_SESSION["chat-errors"] = []; //denne samler mulige errors fra de forskjellige scriptsene som chat bruker
 
 //Legger til en start på gemini-prompten, som gir rammer for hvordan gemini skal svare og hva som er relevant for den å svare på
-$promptmaker = "Se for deg at du er en formell bibliotekar ekspert på jobb, hvor din arbeidsoppgave er å anbefale og finne bøker skreddersydd til de besøkende hos biblioteket ditt som heter ‘The BookFinder’. Dine svar skal bare om bøker eller bok preferanse. Vær utfyllende om beskrivelsen av bøkene du anbefaler. Om den besøkende nevner en spesifik sjanger de har lyst på, så gir du dem bok anbefalinger i en liste av 5 bøker. Bøkene du anbefaler kan være hva som helst, blant annet skjønnlitterære eller dokumentariske bøker. Bare gi oppfølgingsspørsmål om det er absolutt nødvendig. En person kommer inn i biblioteket og starter en samtale med deg, her er samtalen: ";
-
+$promptmaker = $PROMPT;
 // Oppretter en chatsamtale om det ikke er en fra før av
 if (!isset($_SESSION['active-chatlog'])) {
     $_SESSION['active-chatlog'] = array($promptmaker); //chatsamtalen er en array som blir appenda til for hver respons/input
