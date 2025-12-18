@@ -7,6 +7,8 @@ header('Content-Type: text/html; charset=utf-8');
 //Henter gemini-api-key ifra config.php
 //dette gjøres slikt at config.php kan være i gitignore, 
 //for å minske sjansen at api nøkkelen blir lagt ut på github med uhell
+
+require_once __DIR__ . '/../scripts/DB/db.inc.php';
 require_once __DIR__ . '/../scripts/config.php';
 
 //henter en enkel input rens funksjon
@@ -16,7 +18,9 @@ require_once __DIR__ . '/../Scripts/sanitizeInputs.php';
 require_once __DIR__ . '/../Scripts/promptRecFinder.php';
 
 //hente utskriftsmetoden til chatlog
-require_once __DIR__ . '/../Scripts/printChatlog.php';
+require_once __DIR__ . '/../classes/ChatManager.php';
+
+$chatManager = new ChatManager($pdo);
 
 //starter opp en session 
 if (session_status() !== PHP_SESSION_ACTIVE) {
@@ -37,8 +41,7 @@ $initialprompt = sanitizeInputs($initialprompt);
 $_SESSION["chat-errors"] = []; //denne samler mulige errors fra de forskjellige scriptsene som chat bruker
 
 //Legger til en start på gemini-prompten, som gir rammer for hvordan gemini skal svare og hva som er relevant for den å svare på
-$promptmaker = "Se for deg at du er en formell bibliotekar ekspert på jobb, hvor din arbeidsoppgave er å anbefale og finne bøker skreddersydd til de besøkende hos biblioteket ditt som heter ‘The BookFinder’. Dine svar skal bare om bøker eller bok preferanse. Vær utfyllende om beskrivelsen av bøkene du anbefaler. Om den besøkende nevner en spesifik sjanger de har lyst på, så gir du dem bok anbefalinger i en liste av 5 bøker. Bøkene du anbefaler kan være hva som helst, blant annet skjønnlitterære eller dokumentariske bøker. Bare gi oppfølgingsspørsmål om det er absolutt nødvendig. En person kommer inn i biblioteket og starter en samtale med deg, her er samtalen: ";
-
+$promptmaker = $PROMPT;
 // Oppretter en chatsamtale om det ikke er en fra før av
 if (!isset($_SESSION['active-chatlog'])) {
     $_SESSION['active-chatlog'] = array($promptmaker); //chatsamtalen er en array som blir appenda til for hver respons/input
@@ -97,7 +100,7 @@ if (isset($result['candidates'][0]['content']['parts'][0]['text'])) {
 
     session_start();
 
-    printchatlog();
+    $chatManager->printchatlog();
     
 } else { //hvis det er en feil
     $_SESSION["chat-errors"][] = "Feil med gemini api-svar";

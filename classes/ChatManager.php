@@ -1,6 +1,7 @@
 <?php
 require_once __DIR__ . '/../Scripts/sessionStart.php';
 require_once __DIR__ . '/../Scripts/DB/db.inc.php';
+require_once __DIR__ . '/../libs/Parsedown.php'; //henter parsedown bibliotek for pen/riktig utskrift. gjør for eksempel **test** til <strong>test</strong>
 
 /*
     Klasse for å håndtere alt om chatlogger utenom printing. Lagring, sletting og henting ifra DB og session
@@ -9,9 +10,11 @@ require_once __DIR__ . '/../Scripts/DB/db.inc.php';
 
 class ChatManager {
     private $pdo;
+    private $parsedown;
 
     public function __construct($pdo) {
         $this->pdo = $pdo;
+        $this->parsedown = new Parsedown();       
     }
     
     //Lagrer chatlog i DB, enten som ny chat eller oppdatering av eksisterende
@@ -60,8 +63,7 @@ class ChatManager {
             $q = $this->pdo->prepare(
                 "DELETE FROM chatlog WHERE chatlog.chatid = :chatid");
             $q->bindParam(':chatid', $chatid);
-            $q->execute();
-            $logs = $q->fetchAll(PDO::FETCH_ASSOC);
+            $q->execute();        
         } else{
             echo "chat id ikke funnet, chatten ble ikke slettet fra din profil.";
         }
@@ -113,6 +115,26 @@ class ChatManager {
             return true; //Hjelper med utskrift
         }
     }
+
+    public function printChatlog() {
+
+        //hvis det er en aktiv chat gående i sesjon
+        if (isset($_SESSION['active-chatlog'])){
+            $first_element = True;
+
+            foreach($_SESSION['active-chatlog'] as $chatdel_index => $chatdel) {
+
+                if($first_element) { //første element er alltid gemini start-prompten, "du er bibliotektar som ... osv", skal ikke vises til bruker
+                    $first_element = False;
+                } elseif($chatdel_index % 2) { //tar annenhver, gjør brukerspørsmål blå og gemini svar grå
+                    echo "<div class='chat-element' style='background-color: lightblue; align-self: flex-end; '>" . $this->parsedown->text(nl2br(htmlspecialchars($chatdel))) . "</div>";
+                } else {
+                    echo "<div class='chat-element' style='background-color: lightgrey; align-self: flex-start; '>" . $this->parsedown->text(nl2br(htmlspecialchars($chatdel))) . "</div>";
+                }                
+            }
+        }
+    }
+
 
     //Sjekker at det er en bruker med ID, og om chatloggen i sesjon er gyldig
     private function chatSessionIsValid() {
