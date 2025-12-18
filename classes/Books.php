@@ -8,7 +8,6 @@ class Books {
     private $description;
     private $pageCount;
     private $thumbnail;
-    private $haveRead;
 
     public function __construct(array $data =[])
     {      

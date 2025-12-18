@@ -12,6 +12,6 @@
         
         //logger ut brukeren fra session
         $_SESSION["userDeletedText"] = true;
-        header("location: ../logUt.php");
+        header("location: logOut.php");
     }
 ?>

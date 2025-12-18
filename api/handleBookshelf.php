@@ -39,12 +39,12 @@ if(isset($data['action']) && $data['action'] === 'remove') {
 if($data && isset($data['title'])) {   
     
     $dbData = [
-        'bookID'           => $data['bookID'],
-        'title'        => $data['title'],
+        'bookID'            => $data['bookID'],
+        'title'             => $data['title'],
         'authors'           => $data['authors'], 
-        'description' => $data['description'] ?? '',
-        'pageCount'       => $data['pageCount'] ?? 0,
-        'thumbnail'       => $data['thumbnail'] ?? null
+        'description'       => $data['description'] ?? '',
+        'pageCount'         => $data['pageCount'] ?? 0,
+        'thumbnail'         => $data['thumbnail'] ?? null
     ];                    
     
     $bookDB->insertBook($dbData);    
