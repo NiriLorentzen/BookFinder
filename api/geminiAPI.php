@@ -7,6 +7,8 @@ header('Content-Type: text/html; charset=utf-8');
 //Henter gemini-api-key ifra config.php
 //dette gjøres slikt at config.php kan være i gitignore, 
 //for å minske sjansen at api nøkkelen blir lagt ut på github med uhell
+
+require_once __DIR__ . '/../scripts/DB/db.inc.php';
 require_once __DIR__ . '/../scripts/config.php';
 
 //henter en enkel input rens funksjon
@@ -16,7 +18,9 @@ require_once __DIR__ . '/../Scripts/sanitizeInputs.php';
 require_once __DIR__ . '/../Scripts/promptRecFinder.php';
 
 //hente utskriftsmetoden til chatlog
-require_once __DIR__ . '/../Scripts/printChatlog.php';
+require_once __DIR__ . '/../classes/ChatManager.php';
+
+$chatManager = new ChatManager($pdo);
 
 //starter opp en session 
 if (session_status() !== PHP_SESSION_ACTIVE) {
@@ -98,7 +102,7 @@ if (isset($result['candidates'][0]['content']['parts'][0]['text'])) {
 
     session_start();
 
-    printchatlog();
+    $chatManager->printchatlog();
     
 } else { //hvis det er en feil
     $_SESSION["chat-errors"][] = "Feil med gemini api-svar";

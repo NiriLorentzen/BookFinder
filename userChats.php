@@ -6,7 +6,7 @@
     require_once __DIR__ . '/api/booksAPI.php';
     require_once __DIR__ . '/scripts/sessionStart.php';
     require_once __DIR__ . '/scripts/DB/db.inc.php';
-    require_once __DIR__ . '/scripts/printChatlog.php';
+    //require_once __DIR__ . '/scripts/printChatlog.php';
     require_once __DIR__ . '/scripts/checkLoginStatus.php';    
     require_once __DIR__ . '/classes/ChatManager.php';
 
@@ -100,7 +100,7 @@
         <div>
             <h2>Snakk med bibliotekaren her!</h2>
             <div class="chatbox" id="chatbox">
-                <?php printchatlog(); ?>
+                <?php $chatManager->printChatlog(); ?>
             </div>
             <input type="text" id="prompt" placeholder="Spør et spørsmål..." style="width:400px;">
             <button id="sendBtn">Send</button>
