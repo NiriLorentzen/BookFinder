@@ -130,8 +130,7 @@ class ChatManager {
                     echo "<div class='chat-element' style='background-color: lightblue; align-self: flex-end; '>" . $this->parsedown->text(nl2br(htmlspecialchars($chatdel))) . "</div>";
                 } else {
                     echo "<div class='chat-element' style='background-color: lightgrey; align-self: flex-start; '>" . $this->parsedown->text(nl2br(htmlspecialchars($chatdel))) . "</div>";
-                }
-                $_SESSION["chat-errors"][] = "utskrift-element: " . $chatdel;
+                }                
             }
         }
     }
