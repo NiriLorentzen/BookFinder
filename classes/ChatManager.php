@@ -60,8 +60,7 @@ class ChatManager {
             $q = $this->pdo->prepare(
                 "DELETE FROM chatlog WHERE chatlog.chatid = :chatid");
             $q->bindParam(':chatid', $chatid);
-            $q->execute();
-            $logs = $q->fetchAll(PDO::FETCH_ASSOC);
+            $q->execute();        
         } else{
             echo "chat id ikke funnet, chatten ble ikke slettet fra din profil.";
         }
