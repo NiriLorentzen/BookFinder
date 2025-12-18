@@ -9,6 +9,7 @@ include __DIR__ . '/scripts/navbar.php';
 
 //sjekker om det er en innlogget admin, ellers blir man videresendt til innlogging (uten at resten av koden her blir kjørt)
 mustBeAdmin();
+$chatManager = new ChatManager($pdo);
 
 //henter alle brukere
 $q = $pdo->prepare(
@@ -52,8 +53,8 @@ foreach($users as $user){
 //chatsøk, skal bruke chatid til å hente ut chatloggen
 if($_SERVER['REQUEST_METHOD'] == 'POST'){
     $chatID = $_POST['chatid'];
-    $search = new ChatManager($pdo);
-    if ($search->findChat($chatID)){
+
+    if ($chatManager->findChat($chatID)){
         $chat_funnet = true;
     } else{
         echo "chat ikke funnet";
@@ -95,7 +96,7 @@ if($_SERVER['REQUEST_METHOD'] == 'POST'){
     </table>
     <p><strong>Finn en chatlog</strong></p>
     <?php if(isset($chat_funnet) && $chat_funnet):?>
-        <div class="chatbox" id="chatbox"><?php printchatlog(); ?></div>
+        <div class="chatbox" id="chatbox"><?php $chatManager->printchatlog(); ?></div>
         <?php unset($_SESSION['active-chatlog']); //chatloggen skal bare vises en gang og skal ikke være synlig hvis man bytter side ?>
     <?php endif; ?>
     <form action="" method="POST">
