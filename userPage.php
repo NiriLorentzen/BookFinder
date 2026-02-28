@@ -1,17 +1,11 @@
-<?php 
-include __DIR__ . '/scripts/navbar.php';
+<?php
+require_once __DIR__ . '/scripts/sessionStart.php';
 require_once __DIR__ . '/scripts/checkLoginStatus.php';
 mustBeLoggedIn();
+
+$pageTitle = 'Brukerside';
+ob_start();
 ?>
-<!DOCTYPE html>
-<html lang="no">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Brukerside</title>
-    <link rel="stylesheet" href="css/stylesheet.css">
-</head>
-<body>
 <div class="page-content">
     <h1>Brukerside</h1>
     <?php if(isset($_SESSION['userID'])): ?>
@@ -21,7 +15,7 @@ mustBeLoggedIn();
                 <th>Fornavn</th>
                 <th>Etternavn</th>
                 <th>Email</th>
-                <?php if(checkAdmin()): //ikke vits å vise brukertype til en normal bruker?>
+                <?php if(checkAdmin()): ?>
                     <th>Brukertype</th>
                 <?php endif; ?>
             </tr>
@@ -40,5 +34,6 @@ mustBeLoggedIn();
         </form>
     <?php endif; ?>
 </div>
-</body>
-</html>
+<?php
+$pageContent = ob_get_clean();
+include __DIR__ . '/templates/layout.php';

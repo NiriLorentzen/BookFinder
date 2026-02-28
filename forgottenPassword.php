@@ -1,5 +1,4 @@
 <?php
-    include __DIR__ . '/scripts/navbar.php';
     require_once __DIR__ . '/scripts/sessionStart.php';
     require_once __DIR__ . '/scripts/DB/db.inc.php';
     require_once __DIR__ . '/scripts/sanitizeInputs.php';
@@ -134,16 +133,9 @@
 
 
 ?>
-
-<!DOCTYPE html>
-<html lang="no">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Gjennoppretting</title>
-    <link rel="stylesheet" href="css/stylesheet.css">
-</head>
-<body>
+$pageTitle = 'Passord gjennoppretting';
+ob_start();
+?>
 <div class="form-page">
     <h2>Passord gjennoppretting</h2>
     <?php if (isset($_GET['token'])): //dersom det er en token i lenken ?>
@@ -163,5 +155,6 @@
     <p>Har du ikke konto? <a href="registerUser.php">Registrer deg her</a>.</p>
 
 </div>
-</body>
-</html>
+<?php
+$pageContent = ob_get_clean();
+include __DIR__ . '/templates/layout.php';

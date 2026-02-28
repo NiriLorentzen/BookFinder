@@ -1,11 +1,8 @@
 <?php 
-require_once __DIR__ . '/scripts/printChatlog.php';
-require_once __DIR__ . '/scripts/checkLoginStatus.php';
 require_once __DIR__ . '/scripts/sessionStart.php';
+require_once __DIR__ . '/scripts/checkLoginStatus.php';
 require_once __DIR__ . '/scripts/DB/db.inc.php';
 require_once __DIR__ . '/classes/ChatManager.php';
-
-include __DIR__ . '/scripts/navbar.php';
 
 //sjekker om det er en innlogget admin, ellers blir man videresendt til innlogging (uten at resten av koden her blir kjørt)
 mustBeAdmin();
@@ -61,16 +58,9 @@ if($_SERVER['REQUEST_METHOD'] == 'POST'){
     }
 }
 
+$pageTitle = 'Adminside';
+ob_start();
 ?>
-
-<!DOCTYPE html>
-<html lang="no">
-<head>
-    <meta charset="UTF-8">    
-    <title>BookFinder</title>
-    <link rel="stylesheet" href="css/stylesheet.css">
-</head>
-<body>
 <div class="page-content">
     <h1>Adminside</h1>
     <table>
@@ -106,5 +96,6 @@ if($_SERVER['REQUEST_METHOD'] == 'POST'){
         <button type="submit">Søk</button>
     </form>
 </div>
-</body>
-</html>
+<?php
+$pageContent = ob_get_clean();
+include __DIR__ . '/templates/layout.php';

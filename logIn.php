@@ -2,7 +2,6 @@
 require_once __DIR__ . '/scripts/sessionStart.php';
 require_once __DIR__ . '/scripts/DB/db.inc.php';
 require_once __DIR__ . '/scripts/sanitizeInputs.php';
-include __DIR__ . '/scripts/navbar.php';
 
 $logInMessage  = "";
 $error = [];
@@ -103,17 +102,9 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         }
     }
 }
+$pageTitle = 'Innlogging';
+ob_start();
 ?>
-
-<!DOCTYPE html>
-<html lang="no">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Innlogging</title>
-    <link rel="stylesheet" href="css/stylesheet.css">
-</head>
-<body>
 <div class="form-page">
 
     <?php
@@ -165,5 +156,6 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     <p>Har du ikke konto? <a href="registerUser.php">Registrer deg her</a>.</p>
 
 </div>
-</body>
-</html>
+<?php
+$pageContent = ob_get_clean();
+include __DIR__ . '/templates/layout.php';

@@ -3,8 +3,6 @@
    Rustic-library aesthetic: warm parchment, dark mahogany, gilded amber
    ============================================================ */
 
-@import url('https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600;700&family=Lato:ital,wght@0,300;0,400;0,700;1,400&display=swap');
-
 /* === CSS Custom Properties === */
 :root {
     /* Colors */
@@ -311,6 +309,7 @@ span.error {
     padding: 1.25rem;
     margin: 0.75rem 0;
     display: flex;
+    flex-direction: row;
     gap: 1.25rem;
     align-items: flex-start;
     box-shadow: var(--shadow-sm);
@@ -328,10 +327,20 @@ img {
 }
 
 .book img {
-    min-width: 65px;
+    width: 65px;
+    height: 100px;
     object-fit: cover;
     box-shadow: var(--shadow-sm);
     flex-shrink: 0;
+    border-radius: var(--radius-sm);
+}
+
+/* Text content column inside a book card */
+.book-content {
+    display: flex;
+    flex-direction: column;
+    flex: 1;
+    min-width: 0;
 }
 
 .book h3 {
@@ -348,6 +357,13 @@ img {
 
 .description-label {
     cursor: pointer;
+    /* Override global label styles that would make description text uppercase */
+    text-transform: none;
+    font-size: inherit;
+    font-weight: normal;
+    letter-spacing: 0;
+    color: inherit;
+    margin-bottom: 0;
 }
 
 .description-preview {
@@ -356,6 +372,7 @@ img {
     font-size: 0.87rem;
     line-height: 1.45;
     transition: color var(--transition);
+    margin-bottom: 0;
 }
 
 .description-preview:hover {
@@ -578,8 +595,7 @@ tr:hover td {
 }
 
 /* === Chatboxes === */
-.chatbox,
-.chatboxAnbefalinger {
+.chatbox {
     border: 1.5px solid var(--border);
     border-radius: var(--radius-md);
     padding: 1rem;
@@ -595,7 +611,8 @@ tr:hover td {
     gap: 0.55rem;
 }
 
-.chatboxAnbefalinger {
+/* Recommendations panel is taller to accommodate book cards */
+#chatboxAnbefalinger {
     max-height: 600px;
 }
 
@@ -658,4 +675,35 @@ tr:hover td {
 
 .chat-actions form {
     margin: 0;
+}
+
+/* === Responsive === */
+@media (max-width: 768px) {
+    .gemini-tekst-bokser {
+        flex-direction: column;
+        padding: 1rem;
+    }
+
+    .page-content {
+        padding: 0 1rem;
+    }
+
+    .form-page {
+        margin: 1.5rem 1rem;
+        padding: 1.5rem 1.25rem;
+    }
+
+    .navbar a {
+        font-size: 0.75rem;
+        padding: 0 0.6rem;
+    }
+
+    .welcomePage {
+        margin: 1.5rem 1rem;
+        padding: 2rem 1.25rem;
+    }
+
+    .welcomePage h1 {
+        font-size: 2rem;
+    }
 }

@@ -3,13 +3,11 @@
     ini_set('default_charset', 'UTF-8');
     header('Content-Type: text/html; charset=utf-8');
 
-    require_once __DIR__ . '/api/booksAPI.php';
     require_once __DIR__ . '/scripts/sessionStart.php';
+    require_once __DIR__ . '/api/booksAPI.php';
     require_once __DIR__ . '/scripts/DB/db.inc.php';
-    require_once __DIR__ . '/scripts/checkLoginStatus.php';    
+    require_once __DIR__ . '/scripts/checkLoginStatus.php';
     require_once __DIR__ . '/classes/ChatManager.php';
-
-    include __DIR__ . '/scripts/navbar.php';
 
 
     $chatManager = new ChatManager($pdo);
@@ -69,20 +67,11 @@
     } 
 
     $geminirecommendations = $_SESSION["recommendations_found"];
+
+    $pageTitle = 'Chat';
+    $extraHead = '<script src="scripts/JS/buttons.js" defer></script>';
+ob_start();
 ?>
-
-
-
-<!DOCTYPE html>
-<html lang="no">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Chat side</title>
-    <link rel="stylesheet" href="css/stylesheet.css">
-    <script src="scripts/JS/buttons.js" defer></script>
-</head>
-<body>
     <?php if(checkLoggedIn()): ?>
         <?php foreach($oldChats as $chat):?>
             <div class="chats-menu"> <p>Dine lagrede chatter:</p>
@@ -156,5 +145,6 @@
         geminiChatSendBtn();        
     });
     </script>
-</body>
-</html>
+<?php
+$pageContent = ob_get_clean();
+include __DIR__ . '/templates/layout.php';

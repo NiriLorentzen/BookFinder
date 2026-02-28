@@ -1,8 +1,8 @@
-<?php 
+<?php
+require_once __DIR__ . '/scripts/sessionStart.php';
 require_once __DIR__ . '/scripts/DB/db.inc.php';
 require_once __DIR__ . '/scripts/validation.php';
 require_once __DIR__ . '/scripts/sanitizeInputs.php';
-include __DIR__ . '/scripts/navbar.php';
 
 const USER_ROLE = 2;
 $userData = [];
@@ -106,19 +106,9 @@ if($_SERVER["REQUEST_METHOD"] == "POST") {
         
     }
 }
+$pageTitle = 'Registrering';
+ob_start();
 ?>
-
-
-
-<!DOCTYPE html>
-<html lang="no">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Registeringsside</title>
-    <link rel="stylesheet" href="css/stylesheet.css">
-</head>
-<body>
 <div class="form-page">
 <?php if($success): ?>
     <div>
@@ -157,5 +147,6 @@ if($_SERVER["REQUEST_METHOD"] == "POST") {
 <?php endif; ?>
 
 </div>
-</body>
-</html>
+<?php
+$pageContent = ob_get_clean();
+include __DIR__ . '/templates/layout.php';
