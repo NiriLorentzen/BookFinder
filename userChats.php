@@ -101,22 +101,20 @@ ob_start();
                 
             </div>
             <input type="text" id="prompt" placeholder="Spør et spørsmål...">
-            <button id="sendBtn">Send</button>
-
             <div class="chat-actions">
+                <button id="sendBtn">Send</button>
                 <form method="post">
                     <input type="hidden" name="action" value="newChat">
                     <button type="submit" id="newChatBtn">Ny chat</button>
                 </form>
-
                 <?php if(checkLoggedIn()): ?>
-                    <form method="post" onsubmit="return confirm('Er du sikker?');">
-                        <input type="hidden" name="action" value="deleteChat">
-                        <button type="submit" id="deleteChatBtn">Slett chat</button>
-                    </form>
                     <form method="post">
                         <input type="hidden" name="action" value="saveChat">
-                        <button type="submit">Lagre denne chatten</button>
+                        <button type="submit">Lagre chat</button>
+                    </form>
+                    <form method="post" onsubmit="return confirm('Er du sikker?');" class="chat-actions-delete">
+                        <input type="hidden" name="action" value="deleteChat">
+                        <button type="submit" id="deleteChatBtn">Slett chat</button>
                     </form>
                 <?php endif; ?>
             </div>

@@ -653,17 +653,16 @@ tr:hover td {
     align-self: flex-start !important;
 }
 
-/* Chat input */
+
 #prompt {
-    width: 100% !important;
-    margin-top: 0.75rem;
+    width: 100%;
     margin-bottom: 0.5rem;
 }
 
 /* Chat send button */
 #sendBtn {
     background-color: var(--accent);
-    margin-bottom: 0.25rem;
+    white-space: nowrap;
 }
 #sendBtn:hover {
     background-color: #a87830;
@@ -677,16 +676,22 @@ tr:hover td {
     background-color: var(--btn-danger-hover);
 }
 
-/* Group the chat action buttons */
+/* Chat action buttons row */
 .chat-actions {
     display: flex;
-    flex-wrap: wrap;
+    align-items: center;
     gap: 0.5rem;
-    margin-top: 0.5rem;
+    margin-top: 0.75rem;
+    padding-top: 0.75rem;
+    border-top: 1.5px solid var(--border);
 }
 
 .chat-actions form {
     margin: 0;
+}
+
+.chat-actions-delete {
+    margin-left: auto !important;
 }
 
 /* === Responsive === */
