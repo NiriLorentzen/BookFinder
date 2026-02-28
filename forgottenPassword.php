@@ -59,9 +59,9 @@
                 $mail->Body = "Klikk her for å tilbakestille passord: <a href='$resetlink'>$resetlink</a>";
 
                 $mail->send();
-                echo 'Resetting lenke sendt på mail!';
+                $message = 'Resetting lenke sendt på mail!';
             } catch (Exception $e) {
-                echo "Kunne ikke sende e-post: {$mail->ErrorInfo}";
+                $message = "Kunne ikke sende e-post: {$mail->ErrorInfo}";
             }
 
             $now = date('Y-m-d H:i:s'); //nåværende dato og tid
@@ -85,7 +85,7 @@
 
         //hvis passordet er for svakt
         if(!$result['valid']) {
-            print_r($result['message']);
+            $message = $result['message'];
         } else{
             //hasher nytt passord
             $new_password = password_hash($_POST["passord"], PASSWORD_DEFAULT);
@@ -110,7 +110,7 @@
 
                 //dersom det har gått mer enn en time siden reset token ble lagd
                 if ($now >= $expiration){
-                    echo "Passord gjennopprettingslenken er utløpt, prøv på nytt!";
+                    $message = "Passord gjennopprettingslenken er utløpt, prøv på nytt!";
                 } else {
                     // Oppdater passordet
                     $stmt = $pdo->prepare("UPDATE users SET password_hash = :new_password WHERE UserID = :user_id");
@@ -118,7 +118,7 @@
                         'new_password' => $new_password,
                         'user_id' => $brukerid['userid']
                     ]);
-                    echo "Passord resatt!";
+                    $message = "Passord resatt!";
                 }
                 
                 // Sletter alle tokens registrert på brukeren, dette slettes uansett om utløpstiden er valid eller ikke
@@ -126,7 +126,7 @@
                 $stmt->execute(['user_id' => $brukerid['userid']]);
             } else {
                 //enten så finnes ikke token i DB eller så er den ikke koblet til noe bruker
-                echo "Noe gikk galt, passord ikke resatt!";
+                $message = "Noe gikk galt, passord ikke resatt!";
             }
         }
     }
@@ -136,10 +136,13 @@ ob_start();
 ?>
 <div class="form-page">
     <h2>Passord gjennoppretting</h2>
+    <?php if (isset($message)): ?>
+        <p><?php echo htmlspecialchars($message, ENT_QUOTES, 'UTF-8') ?></p>
+    <?php endif; ?>
     <?php if (isset($_GET['token'])): //dersom det er en token i lenken ?>
         <form action="" method="POST">
             <label for="passord">Nytt passord:</label>
-            <input type="text" id="passord" name="passord"><br>
+            <input type="password" id="passord" name="passord"><br>
             <input type="submit" value="Reset passord">
         </form>
     <?php else: ?>
