@@ -20,9 +20,4 @@ class Sorter {
     }
 
 }
-
-
-
-
-
 ?>
