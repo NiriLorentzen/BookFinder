@@ -36,7 +36,8 @@
             $brukermail = $respons[0]["email"];
             $userid = $respons[0]["userID"];
             $token = (string)bin2hex(random_bytes(32)); //tilfeldig generert token
-            $resetlink = "http://localhost/PHP_gruppearbeid/forgottenPassword.php?token=" . $token;
+            $protocol = (!empty($_SERVER['HTTPS']) && $_SERVER['HTTPS'] !== 'off') ? 'https' : 'http';
+            $resetlink = $protocol . '://' . $_SERVER['HTTP_HOST'] . $_SERVER['SCRIPT_NAME'] . '?token=' . $token;
             //sender mail
             try {
                 // SMTP oppsett
@@ -63,7 +64,7 @@
                 echo "Kunne ikke sende e-post: {$mail->ErrorInfo}";
             }
 
-            $now = date('Y-m-d H:i:sa'); //nåværende dato og tid
+            $now = date('Y-m-d H:i:s'); //nåværende dato og tid
 
             //lager en ny rad i DB for å validere token seinere
             $stmt = $pdo->prepare("INSERT INTO forgotten_password (UserID, reset_token, expiration) VALUES (:UserID, :reset_token, :expiration)");
@@ -130,9 +131,6 @@
         }
     }
 
-
-
-?>
 $pageTitle = 'Passord gjennoppretting';
 ob_start();
 ?>
