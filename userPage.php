@@ -20,10 +20,10 @@ ob_start();
                 <?php endif; ?>
             </tr>
             <tr>
-                <td><?php echo $_SESSION['userID'] ?></td>
-                <td><?php echo $_SESSION['fornavn'] ?></td>
-                <td><?php echo $_SESSION['etternavn'] ?></td>
-                <td><?php echo $_SESSION['email'] ?></td>
+                <td><?php echo htmlspecialchars($_SESSION['userID'], ENT_QUOTES, 'UTF-8') ?></td>
+                <td><?php echo htmlspecialchars($_SESSION['fornavn'], ENT_QUOTES, 'UTF-8') ?></td>
+                <td><?php echo htmlspecialchars($_SESSION['etternavn'], ENT_QUOTES, 'UTF-8') ?></td>
+                <td><?php echo htmlspecialchars($_SESSION['email'], ENT_QUOTES, 'UTF-8') ?></td>
                 <?php if(checkAdmin()): ?>
                     <td>Admin</td>
                 <?php endif; ?>

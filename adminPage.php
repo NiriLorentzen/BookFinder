@@ -75,12 +75,12 @@ ob_start();
             </tr>
             <?php foreach($users as $user):?>
                 <tr>
-                    <td><?php echo $user["userID"] ?></td>
-                    <td><?php echo $user["first_name"] ?></td>
-                    <td><?php echo $user["last_name"] ?></td>
-                    <td><?php echo $user["email"] ?></td>
-                    <td><?php echo $roles[$user["userID"]] ?></td>
-                    <td><?php echo $user_chats[$user["userID"]] ?></td>
+                    <td><?php echo htmlspecialchars($user["userID"], ENT_QUOTES, 'UTF-8') ?></td>
+                    <td><?php echo htmlspecialchars($user["first_name"], ENT_QUOTES, 'UTF-8') ?></td>
+                    <td><?php echo htmlspecialchars($user["last_name"], ENT_QUOTES, 'UTF-8') ?></td>
+                    <td><?php echo htmlspecialchars($user["email"], ENT_QUOTES, 'UTF-8') ?></td>
+                    <td><?php echo htmlspecialchars($roles[$user["userID"]], ENT_QUOTES, 'UTF-8') ?></td>
+                    <td><?php echo htmlspecialchars($user_chats[$user["userID"]], ENT_QUOTES, 'UTF-8') ?></td>
                 </tr>
             <?php endforeach; ?>
         </tbody>

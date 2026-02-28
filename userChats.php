@@ -77,8 +77,8 @@ ob_start();
             <div class="chats-menu"> <p>Dine lagrede chatter:</p>
                 <?php foreach($chat as $chatlog): ?>
                     <form method="post">
-                        <input type="hidden" id="chatid" name="chatid" value="<?php echo $chatlog["chatid"] ?>">
-                        <button type="submit" id="chatlog" name="chatlog" value="<?php echo $chatlog["chatlog"] ?>"><?php echo $chatlog["chatid"] ?></button>
+                        <input type="hidden" id="chatid" name="chatid" value="<?php echo htmlspecialchars($chatlog["chatid"], ENT_QUOTES, 'UTF-8') ?>">
+                        <button type="submit" id="chatlog" name="chatlog" value="<?php echo htmlspecialchars($chatlog["chatlog"], ENT_QUOTES, 'UTF-8') ?>"><?php echo htmlspecialchars($chatlog["chatid"], ENT_QUOTES, 'UTF-8') ?></button>
                     </form>
                 <?php endforeach; ?>
             </div>
