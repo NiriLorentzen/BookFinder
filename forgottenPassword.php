@@ -1,5 +1,4 @@
 <?php
-    include __DIR__ . '/scripts/navbar.php';
     require_once __DIR__ . '/scripts/sessionStart.php';
     require_once __DIR__ . '/scripts/DB/db.inc.php';
     require_once __DIR__ . '/scripts/sanitizeInputs.php';
@@ -37,7 +36,8 @@
             $brukermail = $respons[0]["email"];
             $userid = $respons[0]["userID"];
             $token = (string)bin2hex(random_bytes(32)); //tilfeldig generert token
-            $resetlink = "http://localhost/PHP_gruppearbeid/forgottenPassword.php?token=" . $token;
+            $protocol = (!empty($_SERVER['HTTPS']) && $_SERVER['HTTPS'] !== 'off') ? 'https' : 'http';
+            $resetlink = $protocol . '://' . $_SERVER['HTTP_HOST'] . $_SERVER['SCRIPT_NAME'] . '?token=' . $token;
             //sender mail
             try {
                 // SMTP oppsett
@@ -59,12 +59,12 @@
                 $mail->Body = "Klikk her for å tilbakestille passord: <a href='$resetlink'>$resetlink</a>";
 
                 $mail->send();
-                echo 'Resetting lenke sendt på mail!';
+                $message = 'Resetting lenke sendt på mail!';
             } catch (Exception $e) {
-                echo "Kunne ikke sende e-post: {$mail->ErrorInfo}";
+                $message = "Kunne ikke sende e-post: {$mail->ErrorInfo}";
             }
 
-            $now = date('Y-m-d H:i:sa'); //nåværende dato og tid
+            $now = date('Y-m-d H:i:s'); //nåværende dato og tid
 
             //lager en ny rad i DB for å validere token seinere
             $stmt = $pdo->prepare("INSERT INTO forgotten_password (UserID, reset_token, expiration) VALUES (:UserID, :reset_token, :expiration)");
@@ -85,7 +85,7 @@
 
         //hvis passordet er for svakt
         if(!$result['valid']) {
-            print_r($result['message']);
+            $message = $result['message'];
         } else{
             //hasher nytt passord
             $new_password = password_hash($_POST["passord"], PASSWORD_DEFAULT);
@@ -110,7 +110,7 @@
 
                 //dersom det har gått mer enn en time siden reset token ble lagd
                 if ($now >= $expiration){
-                    echo "Passord gjennopprettingslenken er utløpt, prøv på nytt!";
+                    $message = "Passord gjennopprettingslenken er utløpt, prøv på nytt!";
                 } else {
                     // Oppdater passordet
                     $stmt = $pdo->prepare("UPDATE users SET password_hash = :new_password WHERE UserID = :user_id");
@@ -118,7 +118,7 @@
                         'new_password' => $new_password,
                         'user_id' => $brukerid['userid']
                     ]);
-                    echo "Passord resatt!";
+                    $message = "Passord resatt!";
                 }
                 
                 // Sletter alle tokens registrert på brukeren, dette slettes uansett om utløpstiden er valid eller ikke
@@ -126,29 +126,23 @@
                 $stmt->execute(['user_id' => $brukerid['userid']]);
             } else {
                 //enten så finnes ikke token i DB eller så er den ikke koblet til noe bruker
-                echo "Noe gikk galt, passord ikke resatt!";
+                $message = "Noe gikk galt, passord ikke resatt!";
             }
         }
     }
 
-
-
+$pageTitle = 'Passord gjennoppretting';
+ob_start();
 ?>
-
-<!DOCTYPE html>
-<html lang="no">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Gjennoppretting</title>
-    <link rel="stylesheet" href="css/stylesheet.css">
-</head>
-<body>
+<div class="form-page">
     <h2>Passord gjennoppretting</h2>
+    <?php if (isset($message)): ?>
+        <p><?php echo htmlspecialchars($message, ENT_QUOTES, 'UTF-8') ?></p>
+    <?php endif; ?>
     <?php if (isset($_GET['token'])): //dersom det er en token i lenken ?>
         <form action="" method="POST">
             <label for="passord">Nytt passord:</label>
-            <input type="text" id="passord" name="passord"><br>
+            <input type="password" id="passord" name="passord"><br>
             <input type="submit" value="Reset passord">
         </form>
     <?php else: ?>
@@ -161,5 +155,7 @@
 
     <p>Har du ikke konto? <a href="registerUser.php">Registrer deg her</a>.</p>
 
-</body>
-</html>
+</div>
+<?php
+$pageContent = ob_get_clean();
+include __DIR__ . '/templates/layout.php';

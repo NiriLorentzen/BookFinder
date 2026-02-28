@@ -3,13 +3,11 @@
     ini_set('default_charset', 'UTF-8');
     header('Content-Type: text/html; charset=utf-8');
 
-    require_once __DIR__ . '/api/booksAPI.php';
     require_once __DIR__ . '/scripts/sessionStart.php';
+    require_once __DIR__ . '/api/booksAPI.php';
     require_once __DIR__ . '/scripts/DB/db.inc.php';
-    require_once __DIR__ . '/scripts/checkLoginStatus.php';    
+    require_once __DIR__ . '/scripts/checkLoginStatus.php';
     require_once __DIR__ . '/classes/ChatManager.php';
-
-    include __DIR__ . '/scripts/navbar.php';
 
 
     $chatManager = new ChatManager($pdo);
@@ -69,27 +67,18 @@
     } 
 
     $geminirecommendations = $_SESSION["recommendations_found"];
+
+    $pageTitle = 'Chat';
+    $extraHead = '<script src="scripts/JS/buttons.js" defer></script>';
+ob_start();
 ?>
-
-
-
-<!DOCTYPE html>
-<html lang="no">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Chat side</title>
-    <link rel="stylesheet" href="css/stylesheet.css">
-    <script src="scripts/JS/buttons.js" defer></script>
-</head>
-<body>
     <?php if(checkLoggedIn()): ?>
         <?php foreach($oldChats as $chat):?>
             <div class="chats-menu"> <p>Dine lagrede chatter:</p>
                 <?php foreach($chat as $chatlog): ?>
                     <form method="post">
-                        <input type="hidden" id="chatid" name="chatid" value="<?php echo $chatlog["chatid"] ?>">
-                        <button type="submit" id="chatlog" name="chatlog" value="<?php echo $chatlog["chatlog"] ?>"><?php echo $chatlog["chatid"] ?></button>
+                        <input type="hidden" id="chatid" name="chatid" value="<?php echo htmlspecialchars($chatlog["chatid"], ENT_QUOTES, 'UTF-8') ?>">
+                        <button type="submit" id="chatlog" name="chatlog" value="<?php echo htmlspecialchars($chatlog["chatlog"], ENT_QUOTES, 'UTF-8') ?>"><?php echo htmlspecialchars($chatlog["chatid"], ENT_QUOTES, 'UTF-8') ?></button>
                     </form>
                 <?php endforeach; ?>
             </div>
@@ -111,25 +100,24 @@
                 <?php endif; ?>
                 
             </div>
-            <input type="text" id="prompt" placeholder="Spør et spørsmål..." style="width:400px;">
-            <button id="sendBtn">Send</button>
-        
-
-            <form method="post">
-                <input type="hidden" name="action" value="newChat">
-                <button type="submit" id="newChatBtn">Ny chat</button>
-            </form>
-
-        <?php if(checkLoggedIn()): ?>  
-            <form method="post" onsubmit="return confirm('Er du sikker?');">
-                <input type="hidden" name="action" value="deleteChat">
-                <button type="submit" id="deleteChatBtn">Slett chat</button>
-            </form>            
-            <form method="post">
-                <input type="hidden" name="action" value="saveChat">
-                <button type="submit">Lagre denne chatten</button>
-            </form>
-        <?php endif; ?>
+            <input type="text" id="prompt" placeholder="Spør et spørsmål...">
+            <div class="chat-actions">
+                <button id="sendBtn">Send</button>
+                <form method="post">
+                    <input type="hidden" name="action" value="newChat">
+                    <button type="submit" id="newChatBtn">Ny chat</button>
+                </form>
+                <?php if(checkLoggedIn()): ?>
+                    <form method="post">
+                        <input type="hidden" name="action" value="saveChat">
+                        <button type="submit">Lagre chat</button>
+                    </form>
+                    <form method="post" onsubmit="return confirm('Er du sikker?');" class="chat-actions-delete">
+                        <input type="hidden" name="action" value="deleteChat">
+                        <button type="submit" id="deleteChatBtn">Slett chat</button>
+                    </form>
+                <?php endif; ?>
+            </div>
 
         </div>
         <div>
@@ -155,5 +143,6 @@
         geminiChatSendBtn();        
     });
     </script>
-</body>
-</html>
+<?php
+$pageContent = ob_get_clean();
+include __DIR__ . '/templates/layout.php';

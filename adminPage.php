@@ -1,11 +1,8 @@
 <?php 
-require_once __DIR__ . '/scripts/printChatlog.php';
-require_once __DIR__ . '/scripts/checkLoginStatus.php';
 require_once __DIR__ . '/scripts/sessionStart.php';
+require_once __DIR__ . '/scripts/checkLoginStatus.php';
 require_once __DIR__ . '/scripts/DB/db.inc.php';
 require_once __DIR__ . '/classes/ChatManager.php';
-
-include __DIR__ . '/scripts/navbar.php';
 
 //sjekker om det er en innlogget admin, ellers blir man videresendt til innlogging (uten at resten av koden her blir kjørt)
 mustBeAdmin();
@@ -61,16 +58,10 @@ if($_SERVER['REQUEST_METHOD'] == 'POST'){
     }
 }
 
+$pageTitle = 'Adminside';
+ob_start();
 ?>
-
-<!DOCTYPE html>
-<html lang="no">
-<head>
-    <meta charset="UTF-8">    
-    <title>BookFinder</title>
-    <link rel="stylesheet" href="css/stylesheet.css">
-</head>
-<body>
+<div class="page-content">
     <h1>Adminside</h1>
     <table>
         <tbody>
@@ -84,12 +75,12 @@ if($_SERVER['REQUEST_METHOD'] == 'POST'){
             </tr>
             <?php foreach($users as $user):?>
                 <tr>
-                    <td><?php echo $user["userID"] ?></td>
-                    <td><?php echo $user["first_name"] ?></td>
-                    <td><?php echo $user["last_name"] ?></td>
-                    <td><?php echo $user["email"] ?></td>
-                    <td><?php echo $roles[$user["userID"]] ?></td>
-                    <td><?php echo $user_chats[$user["userID"]] ?></td>
+                    <td><?php echo htmlspecialchars($user["userID"], ENT_QUOTES, 'UTF-8') ?></td>
+                    <td><?php echo htmlspecialchars($user["first_name"], ENT_QUOTES, 'UTF-8') ?></td>
+                    <td><?php echo htmlspecialchars($user["last_name"], ENT_QUOTES, 'UTF-8') ?></td>
+                    <td><?php echo htmlspecialchars($user["email"], ENT_QUOTES, 'UTF-8') ?></td>
+                    <td><?php echo htmlspecialchars($roles[$user["userID"]], ENT_QUOTES, 'UTF-8') ?></td>
+                    <td><?php echo htmlspecialchars($user_chats[$user["userID"]], ENT_QUOTES, 'UTF-8') ?></td>
                 </tr>
             <?php endforeach; ?>
         </tbody>
@@ -104,5 +95,7 @@ if($_SERVER['REQUEST_METHOD'] == 'POST'){
         <input type="text" id="chatid" name="chatid">
         <button type="submit">Søk</button>
     </form>
-</body>
-</html>
+</div>
+<?php
+$pageContent = ob_get_clean();
+include __DIR__ . '/templates/layout.php';

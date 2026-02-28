@@ -7,8 +7,8 @@
     $baseUrl = str_replace('/Script', '', $scriptPath);
 
     echo "<div class='navbar'>";    
-    echo '<a href="' . $baseUrl . '/index.php"><img src="' . $baseUrl . '/Images/book.png"></a>';
-    echo "<a href='" . $baseUrl . "/userChats.php'>Chatside</a>";
+    echo '<a href="' . $baseUrl . '/index.php"><img src="' . $baseUrl . '/Images/book.png" alt="BookFinder"></a>';
+    echo "<a href='" . $baseUrl . "/userChats.php'>Chat</a>";
     echo "<a href='" . $baseUrl . "/bookDatabase.php'>Bokdatabase</a>"; 
     if(checkLoggedIn()){               
         echo "<a href='" . $baseUrl . "/bookshelf.php'>Din bokhylle</a>";

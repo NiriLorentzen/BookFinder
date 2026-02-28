@@ -1,33 +1,25 @@
-<?php 
-require_once __DIR__ . '/api/booksAPI.php';
+<?php
 require_once __DIR__ . '/scripts/sessionStart.php';
+require_once __DIR__ . '/scripts/checkLoginStatus.php';
+require_once __DIR__ . '/api/booksAPI.php';
 
-include __DIR__ . '/scripts/navbar.php';
+$canSaveBook = true;
 
-$canSaveBook = true; //Settes til true på sider der lagre bok knappen skal dukke opp, når man tar i bruk BookCard template
-
-//Om GET request med bookRec så brukes googleBooksApi til å hente bøker utifra søket
 if($_SERVER['REQUEST_METHOD'] === 'GET' && !empty($_GET['bookRec'])) {
     try {
-        $api = new GoogleBooksApi();       
+        $api = new GoogleBooksApi();
         $recommendations = $api->fetchBooks($_GET['bookRec']);
     } catch (Exception $e) {
         $error = $e->getMessage();
     }
 }
+
+$pageTitle = 'Bokdatabase';
+$extraHead = '<script src="scripts/JS/buttons.js" defer></script>';
+ob_start();
 ?>
-
-<!DOCTYPE html>
-<html lang="no">
-<head>
-    <meta charset="UTF-8">    
-    <title>BookFinder</title>
-    <link rel="stylesheet" href="css/stylesheet.css">    
-    <script src="scripts/JS/buttons.js" defer></script>
-</head>
-<body>
+<div class="page-content">
     <h1>BookFinder</h1>
-
 
     <form method="get" action="">
         <label for="bookRec">Bok database!:</label><br>
@@ -36,17 +28,18 @@ if($_SERVER['REQUEST_METHOD'] === 'GET' && !empty($_GET['bookRec'])) {
     </form>
 
     <?php if(!empty($recommendations)): ?>
-        <?php foreach ($recommendations as $book): ?>
-            <div>
+        <div id="results">
+            <?php foreach ($recommendations as $book): ?>
                 <?php include __DIR__ . '/templates/bookCard.php'; ?>
-            </div>
-        <?php endforeach; ?>
+            <?php endforeach; ?>
+        </div>
     <?php endif; ?>
-
+</div>
 <script>
 window.addEventListener('DOMContentLoaded', () => {
-    saveBookBtn();  
+    saveBookBtn();
 });
 </script>
-</body>
-</html>
+<?php
+$pageContent = ob_get_clean();
+include __DIR__ . '/templates/layout.php';
