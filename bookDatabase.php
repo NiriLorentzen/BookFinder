@@ -26,6 +26,7 @@ if($_SERVER['REQUEST_METHOD'] === 'GET' && !empty($_GET['bookRec'])) {
     <script src="scripts/JS/buttons.js" defer></script>
 </head>
 <body>
+<div class="page-content">
     <h1>BookFinder</h1>
 
 
@@ -43,9 +44,10 @@ if($_SERVER['REQUEST_METHOD'] === 'GET' && !empty($_GET['bookRec'])) {
         <?php endforeach; ?>
     <?php endif; ?>
 
+</div>
 <script>
 window.addEventListener('DOMContentLoaded', () => {
-    saveBookBtn();  
+    saveBookBtn();
 });
 </script>
 </body>

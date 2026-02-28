@@ -144,6 +144,7 @@
     <link rel="stylesheet" href="css/stylesheet.css">
 </head>
 <body>
+<div class="form-page">
     <h2>Passord gjennoppretting</h2>
     <?php if (isset($_GET['token'])): //dersom det er en token i lenken ?>
         <form action="" method="POST">
@@ -161,5 +162,6 @@
 
     <p>Har du ikke konto? <a href="registerUser.php">Registrer deg her</a>.</p>
 
+</div>
 </body>
 </html>

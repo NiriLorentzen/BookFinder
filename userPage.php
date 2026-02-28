@@ -12,6 +12,7 @@ mustBeLoggedIn();
     <link rel="stylesheet" href="css/stylesheet.css">
 </head>
 <body>
+<div class="page-content">
     <h1>Brukerside</h1>
     <?php if(isset($_SESSION['userID'])): ?>
         <table>
@@ -38,5 +39,6 @@ mustBeLoggedIn();
             <button type="submit">Slett bruker</button>
         </form>
     <?php endif; ?>
+</div>
 </body>
 </html>

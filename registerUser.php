@@ -119,7 +119,7 @@ if($_SERVER["REQUEST_METHOD"] == "POST") {
     <link rel="stylesheet" href="css/stylesheet.css">
 </head>
 <body>
-
+<div class="form-page">
 <?php if($success): ?>
     <div>
         <h1>Velkommen, <?= sanitizeInputs($userData['firstName']) ?>!</h1>
@@ -156,5 +156,6 @@ if($_SERVER["REQUEST_METHOD"] == "POST") {
     <p>Har du allerede en konto? <a href="logIn.php">Logg inn her</a>.</p>
 <?php endif; ?>
 
+</div>
 </body>
 </html>

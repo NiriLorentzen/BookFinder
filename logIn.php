@@ -114,9 +114,8 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     <link rel="stylesheet" href="css/stylesheet.css">
 </head>
 <body>
+<div class="form-page">
 
-    
-           
     <?php
     //Viser ulike advarsler fra GET.
     if(isset($_GET['warning'])) {
@@ -165,5 +164,6 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     <hr>
     <p>Har du ikke konto? <a href="registerUser.php">Registrer deg her</a>.</p>
 
+</div>
 </body>
 </html>

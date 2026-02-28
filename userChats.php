@@ -111,25 +111,26 @@
                 <?php endif; ?>
                 
             </div>
-            <input type="text" id="prompt" placeholder="Spør et spørsmål..." style="width:400px;">
+            <input type="text" id="prompt" placeholder="Spør et spørsmål...">
             <button id="sendBtn">Send</button>
-        
 
-            <form method="post">
-                <input type="hidden" name="action" value="newChat">
-                <button type="submit" id="newChatBtn">Ny chat</button>
-            </form>
+            <div class="chat-actions">
+                <form method="post">
+                    <input type="hidden" name="action" value="newChat">
+                    <button type="submit" id="newChatBtn">Ny chat</button>
+                </form>
 
-        <?php if(checkLoggedIn()): ?>  
-            <form method="post" onsubmit="return confirm('Er du sikker?');">
-                <input type="hidden" name="action" value="deleteChat">
-                <button type="submit" id="deleteChatBtn">Slett chat</button>
-            </form>            
-            <form method="post">
-                <input type="hidden" name="action" value="saveChat">
-                <button type="submit">Lagre denne chatten</button>
-            </form>
-        <?php endif; ?>
+                <?php if(checkLoggedIn()): ?>
+                    <form method="post" onsubmit="return confirm('Er du sikker?');">
+                        <input type="hidden" name="action" value="deleteChat">
+                        <button type="submit" id="deleteChatBtn">Slett chat</button>
+                    </form>
+                    <form method="post">
+                        <input type="hidden" name="action" value="saveChat">
+                        <button type="submit">Lagre denne chatten</button>
+                    </form>
+                <?php endif; ?>
+            </div>
 
         </div>
         <div>

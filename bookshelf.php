@@ -31,13 +31,13 @@
     <link rel="stylesheet" href="css/stylesheet.css">
 </head>
 <body>
-
+<div class="page-content">
     <h1>Din Bokhylle</h1>
     
     <?php if(empty($usersBooks)): ?>
         <h2>Bokhyllen din er tom.</h2>
     <?php else: ?>
-        <form method="get" id="sortForm" style="margin-bottom:10px;">
+        <form method="get" id="sortForm">
             <label for="sort">Sorter etter:</label>
             <select name="sort" id="sort" onchange="this.form.submit()">
                 <option value="title_asc" <?= (isset($sort) && $sort === 'title_asc') ? 'selected' : '' ?>>Tittel (a-å)</option>
@@ -49,7 +49,7 @@
             </select>
         </form>
         <?php foreach($usersBooks as $book): ?>
-            <div class="bookItem"style="border:1px solid #ccc; padding:10px; margin:10px;">
+            <div class="bookItem">
                 <?php include 'templates/bookCard.php'; ?>
                 <button type="button" class="removeBookBtn" data-id="<?= $book->getBookId() ?>">Fjern boken fra hyllen</button>
             </div>
@@ -86,6 +86,7 @@
         });
     });
 
-</script> 
-</body> 
+</script>
+</div>
+</body>
 </html>

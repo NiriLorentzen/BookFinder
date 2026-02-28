@@ -71,6 +71,7 @@ if($_SERVER['REQUEST_METHOD'] == 'POST'){
     <link rel="stylesheet" href="css/stylesheet.css">
 </head>
 <body>
+<div class="page-content">
     <h1>Adminside</h1>
     <table>
         <tbody>
@@ -104,5 +105,6 @@ if($_SERVER['REQUEST_METHOD'] == 'POST'){
         <input type="text" id="chatid" name="chatid">
         <button type="submit">Søk</button>
     </form>
+</div>
 </body>
 </html>

@@ -127,9 +127,9 @@ class ChatManager {
                 if($first_element) { //første element er alltid gemini start-prompten, "du er bibliotektar som ... osv", skal ikke vises til bruker
                     $first_element = False;
                 } elseif($chatdel_index % 2) { //tar annenhver, gjør brukerspørsmål blå og gemini svar grå
-                    echo "<div class='chat-element' style='background-color: lightblue; align-self: flex-end; '>" . $this->parsedown->text(nl2br(htmlspecialchars($chatdel))) . "</div>";
+                    echo "<div class='chat-element user-message'>" . $this->parsedown->text(nl2br(htmlspecialchars($chatdel))) . "</div>";
                 } else {
-                    echo "<div class='chat-element' style='background-color: lightgrey; align-self: flex-start; '>" . $this->parsedown->text(nl2br(htmlspecialchars($chatdel))) . "</div>";
+                    echo "<div class='chat-element ai-message'>" . $this->parsedown->text(nl2br(htmlspecialchars($chatdel))) . "</div>";
                 }                
             }
         }
