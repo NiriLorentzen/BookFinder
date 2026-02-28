@@ -318,7 +318,6 @@ span.error {
 
 .book:hover {
     box-shadow: var(--shadow-md);
-    transform: translateY(-2px);
 }
 
 img {
@@ -432,37 +431,41 @@ img {
 }
 
 /* === Modal === */
-.modal-toggle {
-    display: none;
-}
 
-.modal-toggle:checked ~ .modal-overlay {
-    display: flex;
+/* Lock body scroll while a modal is open */
+body.modal-open {
+    overflow: hidden;
 }
 
 .modal-overlay {
     display: none;
     position: fixed;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
+    inset: 0;
     background-color: rgba(44,24,16,.65);
     justify-content: center;
     align-items: center;
     z-index: 1000;
+    /* Slight fade in */
+    animation: none;
+}
+
+.modal-overlay.open {
+    display: flex;
 }
 
 .modal {
     background-color: var(--surface);
     padding: 2rem 2.5rem;
     border-radius: var(--radius-lg);
-    max-width: 620px;
-    width: 92%;
-    max-height: 82vh;
+    width: 70vw;
+    max-width: 70vw;
+    height: 68vh;
+    max-height: 68vh;
     overflow-y: auto;
     position: relative;
     box-shadow: var(--shadow-lg);
+    /* Prevent clicks inside the modal from bubbling to the overlay */
+    pointer-events: all;
 }
 
 .modal h3 {
@@ -480,10 +483,19 @@ img {
     color: var(--text-muted);
     transition: color var(--transition);
     line-height: 1;
+    /* Reset inherited button styles */
+    background: none;
+    border: none;
+    padding: 0;
+    text-transform: none;
+    letter-spacing: 0;
 }
 
 .modal-close:hover {
     color: var(--text);
+    background: none;
+    transform: none;
+    box-shadow: none;
 }
 
 /* === Tables === */

@@ -20,14 +20,13 @@ Må også inkludere "$canSaveBook = true" variabel og include checkloginstatus o
         <p><strong>Forfatter:</strong> <?= htmlspecialchars($book->getAuthors()) ?></p>
         <p><strong>Antall sider:</strong> <?= htmlspecialchars($book->getPageCount()) ?></p>
 
-        <label for="modal-<?= htmlspecialchars($book->getBookId()) ?>" class="description-label">
+        <div class="description-label" data-open-modal="modal-<?= htmlspecialchars($book->getBookId()) ?>">
             <p class="description-preview"><?= htmlspecialchars(substr($book->getDescription(), 0, 100)) ?>...</p>
-        </label>
+        </div>
 
-        <input type="checkbox" id="modal-<?= htmlspecialchars($book->getBookId()) ?>" class="modal-toggle" hidden>
-        <div class="modal-overlay">
+        <div class="modal-overlay" id="modal-<?= htmlspecialchars($book->getBookId()) ?>">
             <div class="modal">
-                <label for="modal-<?= htmlspecialchars($book->getBookId()) ?>" class="modal-close">&times;</label>
+                <button class="modal-close" data-close-modal="modal-<?= htmlspecialchars($book->getBookId()) ?>">&times;</button>
                 <h3><?= htmlspecialchars($book->getTitle()) ?></h3>
                 <p><?= htmlspecialchars($book->getDescription()) ?></p>
             </div>
