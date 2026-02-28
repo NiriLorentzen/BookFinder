@@ -3,7 +3,7 @@
     require_once __DIR__ . '/../Scripts/geminiToGoogle.php';
 
     function findrecommendation($response){
-        if (!session_status() == PHP_SESSION_ACTIVE){
+        if (session_status() !== PHP_SESSION_ACTIVE){
             session_start();
         }
 
@@ -12,33 +12,29 @@
             $_SESSION["recommendations_given"] = array(); //chatsamtalen er en array som blir appenda til for hver respons/input
         } 
 
-        /*oppretter et mønster
-        flere mønster kan brukes for å øke sjansen for å finne bøkene som gemini anbefaler, men her holder vi oss til en enn så lenge
-        gemini sin respons er ikke alltid lik, og å gi et mønster til gemini i prompt-en har gitt oss blandet resultat, så dette funker som oftest bra*/
-        $pattern = '/\d+\.\s*\*{0,2}["“”]?(.*?)["“”]?\*{0,2}\s+av\s+([^:]+):/';
-        
-        //bruker mønsteret for å hente ut mulig bok informasjon ifra gemini-respons, dette skal helst være bare: tittel og forfatter
-        preg_match_all($pattern, $response, $matches);
-
-        //tomt array for anbefalingene
+        // Gemini-prompten må være instruert til å avslutte svaret med en BØKER: [...] JSON-blokk
+        // når den anbefaler bøker (f.eks. BØKER: [{"title": "...", "author": "..."}]).
+        // geminiAPI.php fjerner denne blokken fra teksten som vises i chatten,
+        // mens denne funksjonen henter den ut og parser den til et array med tittel og forfatter.
         $books = [];
-
-        //går gjennom mønster-søk resultatet og legger det i books-array
-        for ($i = 0; $i < count($matches[1]); $i++) {
-            $books[] = [
-                'title'  => trim($matches[1][$i]),
-                'author' => trim($matches[2][$i])
-            ];
+        if (preg_match('/BØKER:\s*(\[.*?\])\s*$/su', $response, $jsonMatch)) {
+            $parsed = json_decode($jsonMatch[1], true);
+            if (is_array($parsed)) {
+                foreach ($parsed as $entry) {
+                    $title  = trim($entry['title'] ?? '');
+                    $author = trim($entry['author'] ?? '');
+                    if (!empty($title) && !empty($author)) {
+                        $books[] = ['title' => $title, 'author' => $author];
+                    }
+                }
+            }
         }
 
         //dersom det er bokanbefalinger funnet, legges det til i sesjonens 'recommendations_given' array
-        if (isset($books)){
-            foreach($books as $bok){
-                $_SESSION["recommendations_given"][] = $bok;
+        if (!empty($books)){
+            foreach($books as $book){
+                $_SESSION["recommendations_given"][] = $book;
             }
-        } else{
-            //for feilsøking
-            $_SESSION["chat-errors"][] = "Ingen bok anbefalinger funnet fra gemini-svaret";
         }
 
         //funksjon i geminitogoogle scriptet som forer mønster-søk resultatet inn til google books

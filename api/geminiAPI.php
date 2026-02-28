@@ -89,8 +89,11 @@ if (isset($result['candidates'][0]['content']['parts'][0]['text'])) {
     $text = $result['candidates'][0]['content']['parts'][0]['text'];
     $text = mb_convert_encoding($text, 'UTF-8', 'UTF-8');
 
+    //fjerner BØKER-blokken fra teksten før lagring, så den ikke vises i chatten
+    $displayText = trim(preg_replace('/\nBØKER:\s*\[.*?\]\s*$/su', '', $text));
+
     //setter at dette er den aktive chatten
-    $_SESSION['active-chatlog'][] = $text;
+    $_SESSION['active-chatlog'][] = $displayText;
 
     //for å finne anbefalinger og koble dem opp mot googlebooks sin api
     try {
