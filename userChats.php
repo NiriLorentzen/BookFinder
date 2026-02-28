@@ -3,8 +3,8 @@
     ini_set('default_charset', 'UTF-8');
     header('Content-Type: text/html; charset=utf-8');
 
-    require_once __DIR__ . '/scripts/sessionStart.php';
     require_once __DIR__ . '/api/booksAPI.php';
+    require_once __DIR__ . '/scripts/sessionStart.php';
     require_once __DIR__ . '/scripts/DB/db.inc.php';
     require_once __DIR__ . '/scripts/checkLoginStatus.php';
     require_once __DIR__ . '/classes/ChatManager.php';

@@ -93,7 +93,11 @@ if (isset($result['candidates'][0]['content']['parts'][0]['text'])) {
     $_SESSION['active-chatlog'][] = $text;
 
     //for å finne anbefalinger og koble dem opp mot googlebooks sin api
-    findrecommendation($text);
+    try {
+        findrecommendation($text);
+    } catch (Exception $e) {
+        $_SESSION["chat-errors"][] = "Kunne ikke hente bokanbefalinger: " . $e->getMessage();
+    }
 
     // tving session til å skrive til disk, bruker den for lang tid kan en seinere window refresh ødelegge for lagring av chatlog
     session_write_close();
